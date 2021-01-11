@@ -21,7 +21,7 @@ function promptMainMenu() {
         name: "toDo",
         type: "list",
         message: `You are currently in ${DBName} database main menu.\n  What action do you intend to perform?`,
-        choices: ["Create", "Retrieve", "Update", "Delete"],
+        choices: ["Create", "Retrieve", "Update", "Delete", "Exit"],
       },
     ])
     .then((answer) => {
@@ -33,9 +33,11 @@ function promptMainMenu() {
         case "Update":
           return promptOptionsForUpdate();
         case "Delete":
-          return console.log("Delete");
+          return promptOptionsForDelete();
+        case "Exit":
+          return endProcess();
         default:
-          console.log("error");
+          console.log("Error from main prompt");
       }
     })
     .catch((error) => {
@@ -54,6 +56,8 @@ function promptOptionsForCreate() {
           "Create New Department",
           "Create New Role",
           "Create New Manager",
+          "Return to Main Menu",
+          "Exit",
         ],
       },
     ])
@@ -69,6 +73,8 @@ function promptOptionsForCreate() {
           return console.log("Create New Manager");
         case "Return to Main Menu":
           return promptMainMenu();
+        case "Exit":
+          return process.exit();
         default:
           console.log("error");
       }
@@ -90,6 +96,7 @@ function promptOptionsForRetrieve() {
           "Retrieve All Roles",
           "Retrieve All Managers",
           "Retrieve All Employees by Manager Id",
+          "Exit",
         ],
       },
     ])
@@ -107,6 +114,8 @@ function promptOptionsForRetrieve() {
           return console.log("Retrieve All Employees by Manager Id");
         case "Return to Main Menu":
           return promptMainMenu();
+        case "Exit":
+          return process.exit();
         default:
           console.log("error from retrieve function");
       }
@@ -125,9 +134,10 @@ function promptOptionsForUpdate() {
         choices: [
           "Update an Employee",
           "Update a Department",
-          "Update a Roles",
+          "Update a Role",
           "Update a Manager",
           "Return to main menu",
+          "Exit",
         ],
       },
     ])
@@ -137,12 +147,14 @@ function promptOptionsForUpdate() {
           return console.log("Update an Employee");
         case "Update a Department":
           return console.log("Update a Department");
-        case "Update a Roles":
+        case "Update a Role":
           return console.log("Update a Roles");
         case "Update a Manager":
           return console.log("Update a Manager");
         case "Return to Main Menu":
           return promptMainMenu();
+        case "Exit":
+          return process.exit();
         default:
           console.log("Error from retrieve function");
       }
@@ -155,7 +167,7 @@ function promptOptionsForDelete() {
   inquirer
     .prompt([
       {
-        name: "toUpdate",
+        name: "toDelete",
         type: "list",
         message: "What do you want to Update?",
         choices: [
@@ -164,11 +176,12 @@ function promptOptionsForDelete() {
           "Delete a Roles",
           "Delete a Manager",
           "Return to main menu",
+          "Exit",
         ],
       },
     ])
     .then((answer) => {
-      switch (answer.toRetrieve) {
+      switch (answer.toDelete) {
         case "Delete an Employee":
           return console.log("Update an Employee");
         case "Delete a Department":
@@ -179,6 +192,8 @@ function promptOptionsForDelete() {
           return console.log("Update a Manager");
         case "Return to Main Menu":
           return promptMainMenu();
+        case "Exit":
+          return process.exit();
         default:
           console.log("Error from delete function.");
       }
@@ -187,3 +202,23 @@ function promptOptionsForDelete() {
       console.log(error);
     });
 }
+function endProcess() {
+  return process.exit();
+}
+function createNewEmployee() {}
+function createNewRole() {}
+function createNewDepartment() {}
+function createNewManager() {}
+function retrieveAllEmployees() {}
+function retrieveAllRoles() {}
+function retrieveAllDepartments() {}
+function retrieveAllManagers() {}
+function retrieveEmployeesByManagerId() {}
+function updateEmployee() {}
+function updateManager() {}
+function updateRole() {}
+function updateDepartment() {}
+function deleteEmployee() {}
+function deleteManager() {}
+function deleteRole() {}
+function deleteDepartment() {}
