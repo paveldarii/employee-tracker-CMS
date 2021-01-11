@@ -490,13 +490,25 @@ function promptOptionsForDelete() {
     .then((answer) => {
       switch (answer.toDelete) {
         case "Delete an Employee":
-          return console.log("Update an Employee");
+          return promptToDeleteEmployee().then((answer) => {
+            deleteRow(answer.id, "employee");
+            askToPromptMainMenu();
+          });
         case "Delete a Department":
-          return console.log("Update a Department");
+          return promptToDeleteDepartment().then((answer) => {
+            deleteRow(answer.id, "department");
+            askToPromptMainMenu();
+          });
         case "Delete a Roles":
-          return console.log("Update a Roles");
+          return promptToDeleteRole().then((answer) => {
+            deleteRow(answer.id, "role");
+            askToPromptMainMenu();
+          });
         case "Delete a Manager":
-          return console.log("Update a Manager");
+          return promptToDeleteManager().then((answer) => {
+            deleteRow(answer.id, "manager");
+            askToPromptMainMenu();
+          });
         case "Return to Main Menu":
           return promptMainMenu();
         case "Exit":
@@ -723,4 +735,16 @@ function promptToDeleteDepartment() {
       message: "What is the department's id that you want to delete?",
     },
   ]);
+}
+function deleteRow(insertedId, tableName) {
+  connection.query(
+    `DELETE FROM ${tableName} WHERE ?`,
+    {
+      id: insertedId,
+    },
+    function (err, res) {
+      if (err) throw err;
+      console.log(res.affectedRows + " products deleted!\n");
+    }
+  );
 }
