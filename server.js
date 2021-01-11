@@ -20,7 +20,7 @@ function promptMainMenu() {
       {
         name: "toDo",
         type: "list",
-        message: `You are currently in ${DBName} database main menu.\n  What action do you intend to perform?`,
+        message: `\nYou are currently in ${DBName} database main menu.\n  What action do you intend to perform?`,
         choices: ["Create", "Retrieve", "Update", "Delete", "Exit"],
       },
     ])
@@ -66,23 +66,77 @@ function promptOptionsForCreate() {
         case "Create New Employee":
           promptToCreateNewEmployee().then((response) => {
             console.log(response);
-            promptMainMenu();
+            connection.query(
+              "INSERT INTO employee SET ?",
+              {
+                first_name: response.firstName,
+                last_name: response.lastName,
+                role_id: response.roleId,
+                manager_id: response.managerId,
+              },
+              function (err, res) {
+                if (err) throw err;
+                console.log(
+                  "\nSuccess: " + res.affectedRows + " employee inserted!\n"
+                );
+                promptMainMenu();
+              }
+            );
           });
           return;
         case "Create New Department":
           return promptToCreateNewDepartment().then((response) => {
             console.log(response);
-            promptMainMenu();
+            connection.query(
+              "INSERT INTO department SET ?",
+              {
+                name: response.newDepartment,
+              },
+              function (err, res) {
+                if (err) throw err;
+                console.log(
+                  "\n Success: " + res.affectedRows + " department inserted!\n"
+                );
+                promptMainMenu();
+              }
+            );
           });
         case "Create New Role":
           return promptToCreateNewRole().then((response) => {
             console.log(response);
-            promptMainMenu();
+            connection.query(
+              "INSERT INTO role SET ?",
+              {
+                title: response.newRole,
+                salary_usd: response.roleSalary,
+                department_id: response.departmentId,
+              },
+              function (err, res) {
+                if (err) throw err;
+                console.log(
+                  "\nSuccess: " + res.affectedRows + " employee inserted!\n"
+                );
+                promptMainMenu();
+              }
+            );
           });
         case "Create New Manager":
-          return promptToCreateNewEmployee().then((response) => {
+          return promptToCreateNewManager().then((response) => {
             console.log(response);
-            promptMainMenu();
+            connection.query(
+              "INSERT INTO manager SET ?",
+              {
+                first_name: response.firstName,
+                last_name: response.lastName,
+              },
+              function (err, res) {
+                if (err) throw err;
+                console.log(
+                  "\nSuccess: " + res.affectedRows + " manager inserted!\n"
+                );
+                promptMainMenu();
+              }
+            );
           });
         case "Return to Main Menu":
           return promptMainMenu();
@@ -216,7 +270,7 @@ function promptOptionsForDelete() {
     });
 }
 function endProcess() {
-  console.log("\nBye!\n");
+  console.log("\n  Bye!\n");
   return process.exit();
 }
 function promptToCreateNewEmployee() {
