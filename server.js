@@ -64,17 +64,30 @@ function promptOptionsForCreate() {
     .then((answer) => {
       switch (answer.toCreate) {
         case "Create New Employee":
-          return console.log("Create New Employee");
+          promptToCreateNewEmployee().then((response) => {
+            console.log(response);
+            promptMainMenu();
+          });
+          return;
         case "Create New Department":
-          return console.log("Create New Department");
+          return promptToCreateNewDepartment().then((response) => {
+            console.log(response);
+            promptMainMenu();
+          });
         case "Create New Role":
-          return console.log("Create New Role");
+          return promptToCreateNewRole().then((response) => {
+            console.log(response);
+            promptMainMenu();
+          });
         case "Create New Manager":
-          return console.log("Create New Manager");
+          return promptToCreateNewEmployee().then((response) => {
+            console.log(response);
+            promptMainMenu();
+          });
         case "Return to Main Menu":
           return promptMainMenu();
         case "Exit":
-          return process.exit();
+          return endProcess();
         default:
           console.log("error");
       }
@@ -115,7 +128,7 @@ function promptOptionsForRetrieve() {
         case "Return to Main Menu":
           return promptMainMenu();
         case "Exit":
-          return process.exit();
+          return endProcess();
         default:
           console.log("error from retrieve function");
       }
@@ -154,7 +167,7 @@ function promptOptionsForUpdate() {
         case "Return to Main Menu":
           return promptMainMenu();
         case "Exit":
-          return process.exit();
+          return endProcess();
         default:
           console.log("Error from retrieve function");
       }
@@ -193,7 +206,7 @@ function promptOptionsForDelete() {
         case "Return to Main Menu":
           return promptMainMenu();
         case "Exit":
-          return process.exit();
+          return endProcess();
         default:
           console.log("Error from delete function.");
       }
@@ -203,22 +216,85 @@ function promptOptionsForDelete() {
     });
 }
 function endProcess() {
+  console.log("\nBye!\n");
   return process.exit();
 }
-function createNewEmployee() {}
-function createNewRole() {}
-function createNewDepartment() {}
-function createNewManager() {}
+function promptToCreateNewEmployee() {
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "firstName",
+      message: "What is the employee's first name?",
+    },
+    {
+      type: "input",
+      name: "lastName",
+      message: "What is the employee's last name?",
+    },
+    {
+      type: "input",
+      name: "managerId",
+      message: "What is Employee's manager Id",
+    },
+    {
+      type: "input",
+      name: "roleId",
+      message: "What is Employee's role Id",
+    },
+  ]);
+}
+function promptToCreateNewRole() {
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "newRole",
+      message: "What is the role that you want to add to the database?",
+    },
+    {
+      type: "input",
+      name: "roleSalary",
+      message: "What is the role's salary?",
+    },
+    {
+      type: "input",
+      name: "departmentId",
+      message: "What is the departmentId?",
+    },
+  ]);
+}
+function promptToCreateNewDepartment() {
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "newDepartment",
+      message: "What is the department name?",
+    },
+  ]);
+}
+function promptToCreateNewManager() {
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "firstName",
+      message: "What is the manager's first name?",
+    },
+    {
+      type: "input",
+      name: "lastName",
+      message: "What is the manager's lastName name?",
+    },
+  ]);
+}
 function retrieveAllEmployees() {}
 function retrieveAllRoles() {}
 function retrieveAllDepartments() {}
 function retrieveAllManagers() {}
 function retrieveEmployeesByManagerId() {}
-function updateEmployee() {}
-function updateManager() {}
-function updateRole() {}
-function updateDepartment() {}
-function deleteEmployee() {}
-function deleteManager() {}
-function deleteRole() {}
-function deleteDepartment() {}
+function promptToUpdateEmployee() {}
+function promptToUpdateManager() {}
+function promptToUpdateRole() {}
+function promptToUpdateDepartment() {}
+function promptToDeleteEmployee() {}
+function promptToDeleteManager() {}
+function promptToDeleteRole() {}
+function promptToDeleteDepartment() {}
