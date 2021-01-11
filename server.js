@@ -190,7 +190,9 @@ function promptOptionsForRetrieve() {
         case "Retrieve All Managers":
           return retrieveInfoFromTable("manager");
         case "Retrieve All Employees by Manager Id":
-          return retrieveEmployeesByManagerId();
+          return promptToReceiveAnId("manager").then((answer) => {
+            retrieveEmployeesByManagerId(answer.id);
+          });
         case "Return to Main Menu":
           return promptMainMenu();
         case "Exit":
@@ -594,7 +596,18 @@ function retrieveInfoFromTable(tableName) {
     askToPromptMainMenu();
   });
 }
-function retrieveEmployeesByManagerId() {}
+function retrieveEmployeesByManagerId(managerId) {
+  connection.query(
+    `SELECT employee.manager_id, employee.first_name, employee.last_name, employee.role_id
+  from employeeDB.employee
+  WHERE manager_id = ${managerId};`,
+    function (err, res) {
+      if (err) throw err;
+      console.table(res);
+      askToPromptMainMenu();
+    }
+  );
+}
 function promptToUpdateEmployee() {
   return inquirer.prompt([
     {
@@ -693,7 +706,7 @@ function promptToReceiveAnId(tableName) {
     {
       type: "input",
       name: "id",
-      message: `What is the ${tableName}'s id that you want to delete?`,
+      message: `What is the ${tableName}'s id?`,
     },
   ]);
 }
