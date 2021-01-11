@@ -309,12 +309,108 @@ function promptOptionsForUpdate() {
                     askToPromptMainMenu();
                   }
                 );
+              default:
+                console.log("Error from update employee function callback!");
             }
           });
         case "Update a Department":
-          return console.log("Update a Department");
+          return promptToUpdateDepartment().then((answer) => {
+            switch (answer.fieldToUpdate) {
+              case "name":
+                return connection.query(
+                  "UPDATE department SET ? WHERE ?",
+                  [
+                    {
+                      name: answer.contentToUpdate,
+                    },
+                    {
+                      id: answer.departmentId,
+                    },
+                  ],
+                  function (err, res) {
+                    if (err) throw err;
+                    console.log(
+                      "Success: " +
+                        res.affectedRows +
+                        " department's name updated!\n"
+                    );
+                    askToPromptMainMenu();
+                  }
+                );
+              default:
+                console.log("Error from update department function callback!");
+            }
+          });
         case "Update a Role":
-          return console.log("Update a Roles");
+          return promptToUpdateRole().then((answer) => {
+            switch (answer.fieldToUpdate) {
+              case "title":
+                return connection.query(
+                  "UPDATE role SET ? WHERE ?",
+                  [
+                    {
+                      title: answer.contentToUpdate,
+                    },
+                    {
+                      id: answer.roleId,
+                    },
+                  ],
+                  function (err, res) {
+                    if (err) throw err;
+                    console.log(
+                      "Success: " +
+                        res.affectedRows +
+                        " role's title updated!\n"
+                    );
+                    askToPromptMainMenu();
+                  }
+                );
+              case "salary_usd":
+                return connection.query(
+                  "UPDATE role SET ? WHERE ?",
+                  [
+                    {
+                      salary_usd: answer.contentToUpdate,
+                    },
+                    {
+                      id: answer.roleId,
+                    },
+                  ],
+                  function (err, res) {
+                    if (err) throw err;
+                    console.log(
+                      "Success: " +
+                        res.affectedRows +
+                        " role's salary updated!\n"
+                    );
+                    askToPromptMainMenu();
+                  }
+                );
+              case "department_id":
+                return connection.query(
+                  "UPDATE role SET ? WHERE ?",
+                  [
+                    {
+                      department_id: answer.contentToUpdate,
+                    },
+                    {
+                      id: answer.employeeId,
+                    },
+                  ],
+                  function (err, res) {
+                    if (err) throw err;
+                    console.log(
+                      "Success: " +
+                        res.affectedRows +
+                        " role's department_id updated!\n"
+                    );
+                    askToPromptMainMenu();
+                  }
+                );
+              default:
+                console.log("Error from update role function callback!");
+            }
+          });
         case "Update a Manager":
           return promptToUpdateManager().then((answer) => {
             switch (answer.fieldToUpdate) {
@@ -552,9 +648,79 @@ function promptToUpdateManager() {
     },
   ]);
 }
-function promptToUpdateRole() {}
-function promptToUpdateDepartment() {}
-function promptToDeleteEmployee() {}
-function promptToDeleteManager() {}
-function promptToDeleteRole() {}
-function promptToDeleteDepartment() {}
+function promptToUpdateRole() {
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "roleId",
+      message: "What is the role's id that you want to update?",
+    },
+    {
+      name: "fieldToUpdate",
+      type: "list",
+      message: "What do you want to update?",
+      choices: ["title", "salary_usd", "department_id"],
+    },
+    {
+      type: "input",
+      name: "contentToUpdate",
+      message: "Insert new content for the field you just chose?",
+    },
+  ]);
+}
+function promptToUpdateDepartment() {
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "departmentId",
+      message: "What is the department's id that you want to update?",
+    },
+    {
+      name: "fieldToUpdate",
+      type: "list",
+      message: "What do you want to update?",
+      choices: ["name"],
+    },
+    {
+      type: "input",
+      name: "contentToUpdate",
+      message: "Insert new content for the field you just chose?",
+    },
+  ]);
+}
+function promptToDeleteEmployee() {
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "id",
+      message: "What is the employee's id that you want to delete?",
+    },
+  ]);
+}
+function promptToDeleteManager() {
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "id",
+      message: "What is the manager's id that you want to delete?",
+    },
+  ]);
+}
+function promptToDeleteRole() {
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "id",
+      message: "What is the role's id that you want to delete?",
+    },
+  ]);
+}
+function promptToDeleteDepartment() {
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "id",
+      message: "What is the department's id that you want to delete?",
+    },
+  ]);
+}
