@@ -13,7 +13,23 @@ connection.connect(function (err) {
   console.log("connected as id " + connection.threadId + "\n");
   promptMainMenu();
 });
-
+function askToPromptMainMenu() {
+  inquirer
+    .prompt([
+      {
+        type: "confirm",
+        name: "isContinuing",
+        message: "Do you want to perform another action?",
+      },
+    ])
+    .then((answer) => {
+      if (answer.isContinuing) {
+        promptMainMenu();
+      } else {
+        endProcess();
+      }
+    });
+}
 function promptMainMenu() {
   inquirer
     .prompt([
@@ -65,7 +81,6 @@ function promptOptionsForCreate() {
       switch (answer.toCreate) {
         case "Create New Employee":
           promptToCreateNewEmployee().then((response) => {
-            console.log(response);
             connection.query(
               "INSERT INTO employee SET ?",
               {
@@ -79,14 +94,13 @@ function promptOptionsForCreate() {
                 console.log(
                   "\nSuccess: " + res.affectedRows + " employee inserted!\n"
                 );
-                promptMainMenu();
+                askToPromptMainMenu();
               }
             );
           });
           return;
         case "Create New Department":
           return promptToCreateNewDepartment().then((response) => {
-            console.log(response);
             connection.query(
               "INSERT INTO department SET ?",
               {
@@ -97,13 +111,12 @@ function promptOptionsForCreate() {
                 console.log(
                   "\n Success: " + res.affectedRows + " department inserted!\n"
                 );
-                promptMainMenu();
+                askToPromptMainMenu();
               }
             );
           });
         case "Create New Role":
           return promptToCreateNewRole().then((response) => {
-            console.log(response);
             connection.query(
               "INSERT INTO role SET ?",
               {
@@ -116,13 +129,12 @@ function promptOptionsForCreate() {
                 console.log(
                   "\nSuccess: " + res.affectedRows + " employee inserted!\n"
                 );
-                promptMainMenu();
+                askToPromptMainMenu();
               }
             );
           });
         case "Create New Manager":
           return promptToCreateNewManager().then((response) => {
-            console.log(response);
             connection.query(
               "INSERT INTO manager SET ?",
               {
@@ -134,7 +146,7 @@ function promptOptionsForCreate() {
                 console.log(
                   "\nSuccess: " + res.affectedRows + " manager inserted!\n"
                 );
-                promptMainMenu();
+                askToPromptMainMenu();
               }
             );
           });
@@ -170,15 +182,15 @@ function promptOptionsForRetrieve() {
     .then((answer) => {
       switch (answer.toRetrieve) {
         case "Retrieve All Employees":
-          return console.log("Create New Employee");
+          return retrieveAllEmployees();
         case "Retrieve All Departments":
-          return console.log("Create New Department");
+          return retrieveAllDepartments();
         case "Retrieve All Roles":
-          return console.log("Create New Role");
+          return retrieveAllRoles();
         case "Retrieve All Managers":
-          return console.log("Create New Manager");
+          return retrieveAllManagers();
         case "Retrieve All Employees by Manager Id":
-          return console.log("Retrieve All Employees by Manager Id");
+          return retrieveEmployeesByManagerId();
         case "Return to Main Menu":
           return promptMainMenu();
         case "Exit":
@@ -209,21 +221,153 @@ function promptOptionsForUpdate() {
       },
     ])
     .then((answer) => {
-      switch (answer.toRetrieve) {
+      switch (answer.toUpdate) {
         case "Update an Employee":
-          return console.log("Update an Employee");
+          return promptToUpdateEmployee().then((answer) => {
+            switch (answer.fieldToUpdate) {
+              case "first_name":
+                return connection.query(
+                  "UPDATE employee SET ? WHERE ?",
+                  [
+                    {
+                      first_name: answer.contentToUpdate,
+                    },
+                    {
+                      id: answer.employeeId,
+                    },
+                  ],
+                  function (err, res) {
+                    if (err) throw err;
+                    console.log(
+                      "Success: " +
+                        res.affectedRows +
+                        " employee's first name updated!\n"
+                    );
+                    askToPromptMainMenu();
+                  }
+                );
+              case "last_name":
+                return connection.query(
+                  "UPDATE employee SET ? WHERE ?",
+                  [
+                    {
+                      first_name: answer.contentToUpdate,
+                    },
+                    {
+                      id: answer.employeeId,
+                    },
+                  ],
+                  function (err, res) {
+                    if (err) throw err;
+                    console.log(
+                      "Success: " +
+                        res.affectedRows +
+                        " employee's last name updated!\n"
+                    );
+                    askToPromptMainMenu();
+                  }
+                );
+              case "role_id":
+                return connection.query(
+                  "UPDATE employee SET ? WHERE ?",
+                  [
+                    {
+                      first_name: answer.contentToUpdate,
+                    },
+                    {
+                      id: answer.employeeId,
+                    },
+                  ],
+                  function (err, res) {
+                    if (err) throw err;
+                    console.log(
+                      "Success: " +
+                        res.affectedRows +
+                        " employee's role id updated!\n"
+                    );
+                    askToPromptMainMenu();
+                  }
+                );
+              case "manager_id":
+                return connection.query(
+                  "UPDATE employee SET ? WHERE ?",
+                  [
+                    {
+                      first_name: answer.contentToUpdate,
+                    },
+                    {
+                      id: answer.employeeId,
+                    },
+                  ],
+                  function (err, res) {
+                    if (err) throw err;
+                    console.log(
+                      "Success: " +
+                        res.affectedRows +
+                        " employee's manager id updated!\n"
+                    );
+                    askToPromptMainMenu();
+                  }
+                );
+            }
+          });
         case "Update a Department":
           return console.log("Update a Department");
         case "Update a Role":
           return console.log("Update a Roles");
         case "Update a Manager":
-          return console.log("Update a Manager");
+          return promptToUpdateManager().then((answer) => {
+            switch (answer.fieldToUpdate) {
+              case "first_name":
+                return connection.query(
+                  "UPDATE manager SET ? WHERE ?",
+                  [
+                    {
+                      first_name: answer.contentToUpdate,
+                    },
+                    {
+                      id: answer.managerId,
+                    },
+                  ],
+                  function (err, res) {
+                    if (err) throw err;
+                    console.log(
+                      "Success: " +
+                        res.affectedRows +
+                        " manager's first name updated!\n"
+                    );
+                    askToPromptMainMenu();
+                  }
+                );
+              case "last_name":
+                return connection.query(
+                  "UPDATE manager SET ? WHERE ?",
+                  [
+                    {
+                      first_name: answer.contentToUpdate,
+                    },
+                    {
+                      id: answer.managerId,
+                    },
+                  ],
+                  function (err, res) {
+                    if (err) throw err;
+                    console.log(
+                      "Success: " +
+                        res.affectedRows +
+                        " managers's last name updated!\n"
+                    );
+                    askToPromptMainMenu();
+                  }
+                );
+            }
+          });
         case "Return to Main Menu":
           return promptMainMenu();
         case "Exit":
           return endProcess();
         default:
-          console.log("Error from retrieve function");
+          console.log("Error from promptOptionsToUpdate function");
       }
     })
     .catch((error) => {
@@ -339,13 +483,75 @@ function promptToCreateNewManager() {
     },
   ]);
 }
-function retrieveAllEmployees() {}
-function retrieveAllRoles() {}
-function retrieveAllDepartments() {}
-function retrieveAllManagers() {}
+function retrieveAllEmployees() {
+  connection.query("SELECT * FROM employee", function (err, res) {
+    if (err) throw err;
+    console.table(res);
+    askToPromptMainMenu();
+  });
+}
+function retrieveAllRoles() {
+  connection.query("SELECT * FROM role", function (err, res) {
+    if (err) throw err;
+    console.table(res);
+    askToPromptMainMenu();
+  });
+}
+function retrieveAllDepartments() {
+  connection.query("SELECT * FROM department", function (err, res) {
+    if (err) throw err;
+    console.table(res);
+    askToPromptMainMenu();
+  });
+}
+function retrieveAllManagers() {
+  connection.query("SELECT * FROM manager", function (err, res) {
+    if (err) throw err;
+    console.table(res);
+    askToPromptMainMenu();
+  });
+}
 function retrieveEmployeesByManagerId() {}
-function promptToUpdateEmployee() {}
-function promptToUpdateManager() {}
+function promptToUpdateEmployee() {
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "employeeId",
+      message: "What is the employee's id that you want to update?",
+    },
+    {
+      name: "fieldToUpdate",
+      type: "list",
+      message: "What do you want to update?",
+      choices: ["first_name", "last_name", "role_id", "manager_id"],
+    },
+    {
+      type: "input",
+      name: "contentToUpdate",
+      message: "Insert new content for the field you just chose?",
+    },
+  ]);
+}
+function promptToUpdateManager() {
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "managerId",
+      message: "What is the manager's id that you want to update?",
+    },
+    {
+      name: "fieldToUpdate",
+      type: "list",
+      message: "What do you want to update?",
+      choices: ["first_name", "last_name"],
+    },
+    {
+      type: "input",
+      name: "contentToUpdate",
+      message: "Insert new content for the field you just chose?",
+    },
+  ]);
+}
 function promptToUpdateRole() {}
 function promptToUpdateDepartment() {}
 function promptToDeleteEmployee() {}
