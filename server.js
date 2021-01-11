@@ -182,13 +182,13 @@ function promptOptionsForRetrieve() {
     .then((answer) => {
       switch (answer.toRetrieve) {
         case "Retrieve All Employees":
-          return retrieveAllEmployees();
+          return retrieveInfoFromTable("employee");
         case "Retrieve All Departments":
-          return retrieveAllDepartments();
+          return retrieveInfoFromTable("department");
         case "Retrieve All Roles":
-          return retrieveAllRoles();
+          return retrieveInfoFromTable("role");
         case "Retrieve All Managers":
-          return retrieveAllManagers();
+          return retrieveInfoFromTable("manager");
         case "Retrieve All Employees by Manager Id":
           return retrieveEmployeesByManagerId();
         case "Return to Main Menu":
@@ -490,24 +490,20 @@ function promptOptionsForDelete() {
     .then((answer) => {
       switch (answer.toDelete) {
         case "Delete an Employee":
-          return promptToDeleteEmployee().then((answer) => {
+          return promptToReceiveAnId("employee").then((answer) => {
             deleteRow(answer.id, "employee");
-            askToPromptMainMenu();
           });
         case "Delete a Department":
-          return promptToDeleteDepartment().then((answer) => {
+          return promptToReceiveAnId("department").then((answer) => {
             deleteRow(answer.id, "department");
-            askToPromptMainMenu();
           });
         case "Delete a Roles":
-          return promptToDeleteRole().then((answer) => {
+          return promptToReceiveAnId("role").then((answer) => {
             deleteRow(answer.id, "role");
-            askToPromptMainMenu();
           });
         case "Delete a Manager":
-          return promptToDeleteManager().then((answer) => {
+          return promptToReceiveAnId("manager").then((answer) => {
             deleteRow(answer.id, "manager");
-            askToPromptMainMenu();
           });
         case "Return to Main Menu":
           return promptMainMenu();
@@ -591,29 +587,8 @@ function promptToCreateNewManager() {
     },
   ]);
 }
-function retrieveAllEmployees() {
-  connection.query("SELECT * FROM employee", function (err, res) {
-    if (err) throw err;
-    console.table(res);
-    askToPromptMainMenu();
-  });
-}
-function retrieveAllRoles() {
-  connection.query("SELECT * FROM role", function (err, res) {
-    if (err) throw err;
-    console.table(res);
-    askToPromptMainMenu();
-  });
-}
-function retrieveAllDepartments() {
-  connection.query("SELECT * FROM department", function (err, res) {
-    if (err) throw err;
-    console.table(res);
-    askToPromptMainMenu();
-  });
-}
-function retrieveAllManagers() {
-  connection.query("SELECT * FROM manager", function (err, res) {
+function retrieveInfoFromTable(tableName) {
+  connection.query(`SELECT * FROM ${tableName}`, function (err, res) {
     if (err) throw err;
     console.table(res);
     askToPromptMainMenu();
@@ -700,42 +675,6 @@ function promptToUpdateDepartment() {
     },
   ]);
 }
-function promptToDeleteEmployee() {
-  return inquirer.prompt([
-    {
-      type: "input",
-      name: "id",
-      message: "What is the employee's id that you want to delete?",
-    },
-  ]);
-}
-function promptToDeleteManager() {
-  return inquirer.prompt([
-    {
-      type: "input",
-      name: "id",
-      message: "What is the manager's id that you want to delete?",
-    },
-  ]);
-}
-function promptToDeleteRole() {
-  return inquirer.prompt([
-    {
-      type: "input",
-      name: "id",
-      message: "What is the role's id that you want to delete?",
-    },
-  ]);
-}
-function promptToDeleteDepartment() {
-  return inquirer.prompt([
-    {
-      type: "input",
-      name: "id",
-      message: "What is the department's id that you want to delete?",
-    },
-  ]);
-}
 function deleteRow(insertedId, tableName) {
   connection.query(
     `DELETE FROM ${tableName} WHERE ?`,
@@ -744,7 +683,17 @@ function deleteRow(insertedId, tableName) {
     },
     function (err, res) {
       if (err) throw err;
-      console.log(res.affectedRows + " products deleted!\n");
+      console.log(res.affectedRows + tableName + " deleted!\n");
+      askToPromptMainMenu();
     }
   );
+}
+function promptToReceiveAnId(tableName) {
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "id",
+      message: `What is the ${tableName}'s id that you want to delete?`,
+    },
+  ]);
 }
