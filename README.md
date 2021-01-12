@@ -41,6 +41,8 @@ Congratulation, you just installed Employee Tracker CMS on your computer!
 
 ## Usage
 
+[Live Demo](https://www.youtube.com/watch?v=HrDD6Pvx9IQ)
+
 This application is highly intuitive, by the way is organized.
 For example, to start the application just insert next code in your bash:
 
