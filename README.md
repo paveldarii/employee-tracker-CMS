@@ -17,13 +17,15 @@
 Employee Tracker is a System which allows business owners to easily interact with employee database of his company.
 By interaction it means to create, retrieve, update, or delete any employee, role, manager, or department from the database.
 
+Used technologies are node and mysql.
+
 Bellow is app's compiled view of the code:
 
 ![main-menu](screenshots/code.jpg)
 
 ## Installation
 
-To instal insert in your bash:
+To instal the app insert in your bash:
 
 ```bash
 git clone git@github.com:paveldarii/employee-tracker-CMS.git
