@@ -17,7 +17,7 @@
 Employee Tracker is a System which allows business owners to easily interact with employee database of his company.
 By interaction it means to create, retrieve, update, or delete any employee, role, manager, or department from the database.
 
-Bellow app's compiled view of the code:
+Bellow is app's compiled view of the code:
 
 ![main-menu](screenshots/code.jpg)
 
@@ -39,7 +39,7 @@ Congratulation, you just installed Employee Tracker CMS on your computer!
 
 ## Usage
 
-This application is highly intuitive, by the way I organized it.
+This application is highly intuitive, by the way is organized.
 For example, to start the application just insert next code in your bash:
 
 ```bash
