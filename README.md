@@ -35,6 +35,8 @@ Then, go to the application home directory from your bash and insert there:
 npm i
 ```
 
+Last thing, you will need to create a database named employeeDB, so after you start mysql in your bash, terminal, or MySqlWorkbench, just insert there all the code from the employee.sql file located in home directory and run it.
+
 Congratulation, you just installed Employee Tracker CMS on your computer!
 
 ## Usage
